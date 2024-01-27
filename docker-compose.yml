@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  php-pdfium:
+    image: phpdfium:dev
+    user: 1000:1000
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/usr/php-pdfium

@@ -1,0 +1,35 @@
+{
+    "name": "benconda/php-pdfium",
+    "description": "PHP implementation of PDFium C++ library",
+    "type": "library",
+    "require": {
+        "ext-ffi": "*",
+        "php": "^8.2",
+        "jcupitt/vips": "^2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.4",
+        "symfony/var-dumper": "^6.3",
+        "symplify/easy-coding-standard": "^12.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BenConda\\PhpPdfium\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BenCondaTest\\PhpPdfium\\": "tests/unit"
+        }
+    },
+    "authors": [
+        {
+            "name": "Benoit Condaminet",
+            "email": "benoit@condami.net"
+        }
+    ],
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+}
