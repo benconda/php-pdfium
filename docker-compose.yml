@@ -7,5 +7,6 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
+      target: base
     volumes:
       - ./:/usr/php-pdfium
