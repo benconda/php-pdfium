@@ -1,4 +1,4 @@
-FROM php:8.2-cli-bookworm
+FROM php:8.2-cli-bookworm as base
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -18,5 +18,10 @@ COPY --link ./include/header.h /usr/lib-pdfium/include/header.h
 
 RUN echo "#define FFI_LIB \"libpdfium.so\"" > /usr/lib-pdfium/include/pdfium.h && gcc -P -E /usr/lib-pdfium/include/header.h >> /usr/lib-pdfium/include/pdfium.h
 
-
 WORKDIR /usr/php-pdfium
+
+FROM base as ci
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN apt-get update && apt-get install zip -y
+COPY --link . /usr/php-pdfium

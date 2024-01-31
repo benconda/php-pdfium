@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  php-pdfium:
+    image: phpdfium:ci
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: ci
