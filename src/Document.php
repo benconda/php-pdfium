@@ -18,6 +18,8 @@ final class Document implements IteratorAggregate
     private CData $formHandler;
     private CData $formFillInfo;
 
+    private static $writer;
+
     public function __construct(
         public readonly CData $handler,
     ) {
@@ -60,6 +62,28 @@ final class Document implements IteratorAggregate
     public function getFormHandler(): CData
     {
         return $this->formHandler;
+    }
+
+    public function saveAsCopy(string $filename, int $saveFlag): bool
+    {
+        $fileWrite = $this->ffi->new('FPDF_FILEWRITE', false);
+        $fileWrite->version = 1;
+        self::$writer = fopen($filename, 'wb');
+        // FFI callback need to be static, and can't use ($variable), to avoid segfault.
+        $fileWrite->WriteBlock = self::writeDocumentCallback(...);
+
+        $res = $this->ffi->FPDF_SaveAsCopy($this->handler, \FFI::addr($fileWrite), $saveFlag);
+        fclose(self::$writer);
+        \FFI::free($fileWrite);
+
+        return (bool) $res;
+    }
+
+    private static function writeDocumentCallback(CData $handler, CData $data, int $size): bool
+    {
+        fwrite(self::$writer, \FFI::string($data, $size));
+
+        return true;
     }
 
     public function __destruct()

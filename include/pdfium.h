@@ -793,3 +793,449 @@ FPDFAnnot_GetFormFieldExportValue(FPDF_FORMHANDLE hHandle,
                                   unsigned long buflen);
  FPDF_BOOL FPDFAnnot_SetURI(FPDF_ANNOTATION annot,
                                                      const char* uri);
+typedef unsigned char __u_char;
+typedef unsigned short int __u_short;
+typedef unsigned int __u_int;
+typedef unsigned long int __u_long;
+typedef signed char __int8_t;
+typedef unsigned char __uint8_t;
+typedef signed short int __int16_t;
+typedef unsigned short int __uint16_t;
+typedef signed int __int32_t;
+typedef unsigned int __uint32_t;
+typedef signed long int __int64_t;
+typedef unsigned long int __uint64_t;
+typedef __int8_t __int_least8_t;
+typedef __uint8_t __uint_least8_t;
+typedef __int16_t __int_least16_t;
+typedef __uint16_t __uint_least16_t;
+typedef __int32_t __int_least32_t;
+typedef __uint32_t __uint_least32_t;
+typedef __int64_t __int_least64_t;
+typedef __uint64_t __uint_least64_t;
+typedef long int __quad_t;
+typedef unsigned long int __u_quad_t;
+typedef long int __intmax_t;
+typedef unsigned long int __uintmax_t;
+typedef unsigned long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned long int __nlink_t;
+typedef long int __off_t;
+typedef long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+typedef long int __suseconds64_t;
+typedef int __daddr_t;
+typedef int __key_t;
+typedef int __clockid_t;
+typedef void * __timer_t;
+typedef long int __blksize_t;
+typedef long int __blkcnt_t;
+typedef long int __blkcnt64_t;
+typedef unsigned long int __fsblkcnt_t;
+typedef unsigned long int __fsblkcnt64_t;
+typedef unsigned long int __fsfilcnt_t;
+typedef unsigned long int __fsfilcnt64_t;
+typedef long int __fsword_t;
+typedef long int __ssize_t;
+typedef long int __syscall_slong_t;
+typedef unsigned long int __syscall_ulong_t;
+typedef __off64_t __loff_t;
+typedef char *__caddr_t;
+typedef long int __intptr_t;
+typedef unsigned int __socklen_t;
+typedef int __sig_atomic_t;
+typedef __int8_t int8_t;
+typedef __int16_t int16_t;
+typedef __int32_t int32_t;
+typedef __int64_t int64_t;
+typedef __uint8_t uint8_t;
+typedef __uint16_t uint16_t;
+typedef __uint32_t uint32_t;
+typedef __uint64_t uint64_t;
+typedef __int_least8_t int_least8_t;
+typedef __int_least16_t int_least16_t;
+typedef __int_least32_t int_least32_t;
+typedef __int_least64_t int_least64_t;
+typedef __uint_least8_t uint_least8_t;
+typedef __uint_least16_t uint_least16_t;
+typedef __uint_least32_t uint_least32_t;
+typedef __uint_least64_t uint_least64_t;
+typedef signed char int_fast8_t;
+typedef long int int_fast16_t;
+typedef long int int_fast32_t;
+typedef long int int_fast64_t;
+typedef unsigned char uint_fast8_t;
+typedef unsigned long int uint_fast16_t;
+typedef unsigned long int uint_fast32_t;
+typedef unsigned long int uint_fast64_t;
+typedef long int intptr_t;
+typedef unsigned long int uintptr_t;
+typedef __intmax_t intmax_t;
+typedef __uintmax_t uintmax_t;
+typedef struct FPDF_IMAGEOBJ_METADATA {
+  unsigned int width;
+  unsigned int height;
+  float horizontal_dpi;
+  float vertical_dpi;
+  unsigned int bits_per_pixel;
+  int colorspace;
+  int marked_content_id;
+} FPDF_IMAGEOBJ_METADATA;
+ FPDF_DOCUMENT FPDF_CreateNewDocument();
+ FPDF_PAGE FPDFPage_New(FPDF_DOCUMENT document,
+                                                 int page_index,
+                                                 double width,
+                                                 double height);
+ void FPDFPage_Delete(FPDF_DOCUMENT document,
+                                               int page_index);
+ FPDF_BOOL
+FPDF_MovePages(FPDF_DOCUMENT document,
+               const int* page_indices,
+               unsigned long page_indices_len,
+               int dest_page_index);
+ int FPDFPage_GetRotation(FPDF_PAGE page);
+ void FPDFPage_SetRotation(FPDF_PAGE page, int rotate);
+ void
+FPDFPage_InsertObject(FPDF_PAGE page, FPDF_PAGEOBJECT page_object);
+ FPDF_BOOL
+FPDFPage_RemoveObject(FPDF_PAGE page, FPDF_PAGEOBJECT page_object);
+ int FPDFPage_CountObjects(FPDF_PAGE page);
+ FPDF_PAGEOBJECT FPDFPage_GetObject(FPDF_PAGE page,
+                                                             int index);
+ FPDF_BOOL FPDFPage_HasTransparency(FPDF_PAGE page);
+ FPDF_BOOL FPDFPage_GenerateContent(FPDF_PAGE page);
+ void FPDFPageObj_Destroy(FPDF_PAGEOBJECT page_object);
+ FPDF_BOOL
+FPDFPageObj_HasTransparency(FPDF_PAGEOBJECT page_object);
+ int FPDFPageObj_GetType(FPDF_PAGEOBJECT page_object);
+ void
+FPDFPageObj_Transform(FPDF_PAGEOBJECT page_object,
+                      double a,
+                      double b,
+                      double c,
+                      double d,
+                      double e,
+                      double f);
+ FPDF_BOOL
+FPDFPageObj_GetMatrix(FPDF_PAGEOBJECT page_object, FS_MATRIX* matrix);
+ FPDF_BOOL
+FPDFPageObj_SetMatrix(FPDF_PAGEOBJECT page_object, const FS_MATRIX* matrix);
+ void FPDFPage_TransformAnnots(FPDF_PAGE page,
+                                                        double a,
+                                                        double b,
+                                                        double c,
+                                                        double d,
+                                                        double e,
+                                                        double f);
+ FPDF_PAGEOBJECT
+FPDFPageObj_NewImageObj(FPDF_DOCUMENT document);
+ int
+FPDFPageObj_CountMarks(FPDF_PAGEOBJECT page_object);
+ FPDF_PAGEOBJECTMARK
+FPDFPageObj_GetMark(FPDF_PAGEOBJECT page_object, unsigned long index);
+ FPDF_PAGEOBJECTMARK
+FPDFPageObj_AddMark(FPDF_PAGEOBJECT page_object, FPDF_BYTESTRING name);
+ FPDF_BOOL
+FPDFPageObj_RemoveMark(FPDF_PAGEOBJECT page_object, FPDF_PAGEOBJECTMARK mark);
+ FPDF_BOOL
+FPDFPageObjMark_GetName(FPDF_PAGEOBJECTMARK mark,
+                        void* buffer,
+                        unsigned long buflen,
+                        unsigned long* out_buflen);
+ int
+FPDFPageObjMark_CountParams(FPDF_PAGEOBJECTMARK mark);
+ FPDF_BOOL
+FPDFPageObjMark_GetParamKey(FPDF_PAGEOBJECTMARK mark,
+                            unsigned long index,
+                            void* buffer,
+                            unsigned long buflen,
+                            unsigned long* out_buflen);
+ FPDF_OBJECT_TYPE
+FPDFPageObjMark_GetParamValueType(FPDF_PAGEOBJECTMARK mark,
+                                  FPDF_BYTESTRING key);
+ FPDF_BOOL
+FPDFPageObjMark_GetParamIntValue(FPDF_PAGEOBJECTMARK mark,
+                                 FPDF_BYTESTRING key,
+                                 int* out_value);
+ FPDF_BOOL
+FPDFPageObjMark_GetParamStringValue(FPDF_PAGEOBJECTMARK mark,
+                                    FPDF_BYTESTRING key,
+                                    void* buffer,
+                                    unsigned long buflen,
+                                    unsigned long* out_buflen);
+ FPDF_BOOL
+FPDFPageObjMark_GetParamBlobValue(FPDF_PAGEOBJECTMARK mark,
+                                  FPDF_BYTESTRING key,
+                                  void* buffer,
+                                  unsigned long buflen,
+                                  unsigned long* out_buflen);
+ FPDF_BOOL
+FPDFPageObjMark_SetIntParam(FPDF_DOCUMENT document,
+                            FPDF_PAGEOBJECT page_object,
+                            FPDF_PAGEOBJECTMARK mark,
+                            FPDF_BYTESTRING key,
+                            int value);
+ FPDF_BOOL
+FPDFPageObjMark_SetStringParam(FPDF_DOCUMENT document,
+                               FPDF_PAGEOBJECT page_object,
+                               FPDF_PAGEOBJECTMARK mark,
+                               FPDF_BYTESTRING key,
+                               FPDF_BYTESTRING value);
+ FPDF_BOOL
+FPDFPageObjMark_SetBlobParam(FPDF_DOCUMENT document,
+                             FPDF_PAGEOBJECT page_object,
+                             FPDF_PAGEOBJECTMARK mark,
+                             FPDF_BYTESTRING key,
+                             void* value,
+                             unsigned long value_len);
+ FPDF_BOOL
+FPDFPageObjMark_RemoveParam(FPDF_PAGEOBJECT page_object,
+                            FPDF_PAGEOBJECTMARK mark,
+                            FPDF_BYTESTRING key);
+ FPDF_BOOL
+FPDFImageObj_LoadJpegFile(FPDF_PAGE* pages,
+                          int count,
+                          FPDF_PAGEOBJECT image_object,
+                          FPDF_FILEACCESS* file_access);
+ FPDF_BOOL
+FPDFImageObj_LoadJpegFileInline(FPDF_PAGE* pages,
+                                int count,
+                                FPDF_PAGEOBJECT image_object,
+                                FPDF_FILEACCESS* file_access);
+ FPDF_BOOL
+FPDFImageObj_SetMatrix(FPDF_PAGEOBJECT image_object,
+                       double a,
+                       double b,
+                       double c,
+                       double d,
+                       double e,
+                       double f);
+ FPDF_BOOL
+FPDFImageObj_SetBitmap(FPDF_PAGE* pages,
+                       int count,
+                       FPDF_PAGEOBJECT image_object,
+                       FPDF_BITMAP bitmap);
+ FPDF_BITMAP
+FPDFImageObj_GetBitmap(FPDF_PAGEOBJECT image_object);
+ FPDF_BITMAP
+FPDFImageObj_GetRenderedBitmap(FPDF_DOCUMENT document,
+                               FPDF_PAGE page,
+                               FPDF_PAGEOBJECT image_object);
+ unsigned long
+FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
+                                 void* buffer,
+                                 unsigned long buflen);
+ unsigned long
+FPDFImageObj_GetImageDataRaw(FPDF_PAGEOBJECT image_object,
+                             void* buffer,
+                             unsigned long buflen);
+ int
+FPDFImageObj_GetImageFilterCount(FPDF_PAGEOBJECT image_object);
+ unsigned long
+FPDFImageObj_GetImageFilter(FPDF_PAGEOBJECT image_object,
+                            int index,
+                            void* buffer,
+                            unsigned long buflen);
+ FPDF_BOOL
+FPDFImageObj_GetImageMetadata(FPDF_PAGEOBJECT image_object,
+                              FPDF_PAGE page,
+                              FPDF_IMAGEOBJ_METADATA* metadata);
+ FPDF_BOOL
+FPDFImageObj_GetImagePixelSize(FPDF_PAGEOBJECT image_object,
+                               unsigned int* width,
+                               unsigned int* height);
+ FPDF_PAGEOBJECT FPDFPageObj_CreateNewPath(float x,
+                                                                    float y);
+ FPDF_PAGEOBJECT FPDFPageObj_CreateNewRect(float x,
+                                                                    float y,
+                                                                    float w,
+                                                                    float h);
+ FPDF_BOOL
+FPDFPageObj_GetBounds(FPDF_PAGEOBJECT page_object,
+                      float* left,
+                      float* bottom,
+                      float* right,
+                      float* top);
+ FPDF_BOOL
+FPDFPageObj_GetRotatedBounds(FPDF_PAGEOBJECT page_object,
+                             FS_QUADPOINTSF* quad_points);
+ void
+FPDFPageObj_SetBlendMode(FPDF_PAGEOBJECT page_object,
+                         FPDF_BYTESTRING blend_mode);
+ FPDF_BOOL
+FPDFPageObj_SetStrokeColor(FPDF_PAGEOBJECT page_object,
+                           unsigned int R,
+                           unsigned int G,
+                           unsigned int B,
+                           unsigned int A);
+ FPDF_BOOL
+FPDFPageObj_GetStrokeColor(FPDF_PAGEOBJECT page_object,
+                           unsigned int* R,
+                           unsigned int* G,
+                           unsigned int* B,
+                           unsigned int* A);
+ FPDF_BOOL
+FPDFPageObj_SetStrokeWidth(FPDF_PAGEOBJECT page_object, float width);
+ FPDF_BOOL
+FPDFPageObj_GetStrokeWidth(FPDF_PAGEOBJECT page_object, float* width);
+ int
+FPDFPageObj_GetLineJoin(FPDF_PAGEOBJECT page_object);
+ FPDF_BOOL
+FPDFPageObj_SetLineJoin(FPDF_PAGEOBJECT page_object, int line_join);
+ int
+FPDFPageObj_GetLineCap(FPDF_PAGEOBJECT page_object);
+ FPDF_BOOL
+FPDFPageObj_SetLineCap(FPDF_PAGEOBJECT page_object, int line_cap);
+ FPDF_BOOL
+FPDFPageObj_SetFillColor(FPDF_PAGEOBJECT page_object,
+                         unsigned int R,
+                         unsigned int G,
+                         unsigned int B,
+                         unsigned int A);
+ FPDF_BOOL
+FPDFPageObj_GetFillColor(FPDF_PAGEOBJECT page_object,
+                         unsigned int* R,
+                         unsigned int* G,
+                         unsigned int* B,
+                         unsigned int* A);
+ FPDF_BOOL
+FPDFPageObj_GetDashPhase(FPDF_PAGEOBJECT page_object, float* phase);
+ FPDF_BOOL
+FPDFPageObj_SetDashPhase(FPDF_PAGEOBJECT page_object, float phase);
+ int
+FPDFPageObj_GetDashCount(FPDF_PAGEOBJECT page_object);
+ FPDF_BOOL
+FPDFPageObj_GetDashArray(FPDF_PAGEOBJECT page_object,
+                         float* dash_array,
+                         size_t dash_count);
+ FPDF_BOOL
+FPDFPageObj_SetDashArray(FPDF_PAGEOBJECT page_object,
+                         const float* dash_array,
+                         size_t dash_count,
+                         float phase);
+ int FPDFPath_CountSegments(FPDF_PAGEOBJECT path);
+ FPDF_PATHSEGMENT
+FPDFPath_GetPathSegment(FPDF_PAGEOBJECT path, int index);
+ FPDF_BOOL
+FPDFPathSegment_GetPoint(FPDF_PATHSEGMENT segment, float* x, float* y);
+ int FPDFPathSegment_GetType(FPDF_PATHSEGMENT segment);
+ FPDF_BOOL
+FPDFPathSegment_GetClose(FPDF_PATHSEGMENT segment);
+ FPDF_BOOL FPDFPath_MoveTo(FPDF_PAGEOBJECT path,
+                                                    float x,
+                                                    float y);
+ FPDF_BOOL FPDFPath_LineTo(FPDF_PAGEOBJECT path,
+                                                    float x,
+                                                    float y);
+ FPDF_BOOL FPDFPath_BezierTo(FPDF_PAGEOBJECT path,
+                                                      float x1,
+                                                      float y1,
+                                                      float x2,
+                                                      float y2,
+                                                      float x3,
+                                                      float y3);
+ FPDF_BOOL FPDFPath_Close(FPDF_PAGEOBJECT path);
+ FPDF_BOOL FPDFPath_SetDrawMode(FPDF_PAGEOBJECT path,
+                                                         int fillmode,
+                                                         FPDF_BOOL stroke);
+ FPDF_BOOL FPDFPath_GetDrawMode(FPDF_PAGEOBJECT path,
+                                                         int* fillmode,
+                                                         FPDF_BOOL* stroke);
+ FPDF_PAGEOBJECT
+FPDFPageObj_NewTextObj(FPDF_DOCUMENT document,
+                       FPDF_BYTESTRING font,
+                       float font_size);
+ FPDF_BOOL
+FPDFText_SetText(FPDF_PAGEOBJECT text_object, FPDF_WIDESTRING text);
+ FPDF_BOOL
+FPDFText_SetCharcodes(FPDF_PAGEOBJECT text_object,
+                      const uint32_t* charcodes,
+                      size_t count);
+ FPDF_FONT FPDFText_LoadFont(FPDF_DOCUMENT document,
+                                                      const uint8_t* data,
+                                                      uint32_t size,
+                                                      int font_type,
+                                                      FPDF_BOOL cid);
+ FPDF_FONT
+FPDFText_LoadStandardFont(FPDF_DOCUMENT document, FPDF_BYTESTRING font);
+ FPDF_BOOL
+FPDFTextObj_GetFontSize(FPDF_PAGEOBJECT text, float* size);
+ void FPDFFont_Close(FPDF_FONT font);
+ FPDF_PAGEOBJECT
+FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+                          FPDF_FONT font,
+                          float font_size);
+ FPDF_TEXT_RENDERMODE
+FPDFTextObj_GetTextRenderMode(FPDF_PAGEOBJECT text);
+ FPDF_BOOL
+FPDFTextObj_SetTextRenderMode(FPDF_PAGEOBJECT text,
+                              FPDF_TEXT_RENDERMODE render_mode);
+ unsigned long
+FPDFTextObj_GetText(FPDF_PAGEOBJECT text_object,
+                    FPDF_TEXTPAGE text_page,
+                    FPDF_WCHAR* buffer,
+                    unsigned long length);
+ FPDF_BITMAP
+FPDFTextObj_GetRenderedBitmap(FPDF_DOCUMENT document,
+                              FPDF_PAGE page,
+                              FPDF_PAGEOBJECT text_object,
+                              float scale);
+ FPDF_FONT FPDFTextObj_GetFont(FPDF_PAGEOBJECT text);
+ unsigned long
+FPDFFont_GetFontName(FPDF_FONT font, char* buffer, unsigned long length);
+ FPDF_BOOL FPDFFont_GetFontData(FPDF_FONT font,
+                                                         uint8_t* buffer,
+                                                         size_t buflen,
+                                                         size_t* out_buflen);
+ int FPDFFont_GetIsEmbedded(FPDF_FONT font);
+ int FPDFFont_GetFlags(FPDF_FONT font);
+ int FPDFFont_GetWeight(FPDF_FONT font);
+ FPDF_BOOL FPDFFont_GetItalicAngle(FPDF_FONT font,
+                                                            int* angle);
+ FPDF_BOOL FPDFFont_GetAscent(FPDF_FONT font,
+                                                       float font_size,
+                                                       float* ascent);
+ FPDF_BOOL FPDFFont_GetDescent(FPDF_FONT font,
+                                                        float font_size,
+                                                        float* descent);
+ FPDF_BOOL FPDFFont_GetGlyphWidth(FPDF_FONT font,
+                                                           uint32_t glyph,
+                                                           float font_size,
+                                                           float* width);
+ FPDF_GLYPHPATH FPDFFont_GetGlyphPath(FPDF_FONT font,
+                                                               uint32_t glyph,
+                                                               float font_size);
+ int
+FPDFGlyphPath_CountGlyphSegments(FPDF_GLYPHPATH glyphpath);
+ FPDF_PATHSEGMENT
+FPDFGlyphPath_GetGlyphPathSegment(FPDF_GLYPHPATH glyphpath, int index);
+ int
+FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
+ FPDF_PAGEOBJECT
+FPDFFormObj_GetObject(FPDF_PAGEOBJECT form_object, unsigned long index);
+typedef struct FPDF_FILEWRITE_ {
+  int version;
+  int (*WriteBlock)(struct FPDF_FILEWRITE_* pThis,
+                    const void* pData,
+                    unsigned long size);
+} FPDF_FILEWRITE;
+ FPDF_BOOL FPDF_SaveAsCopy(FPDF_DOCUMENT document,
+                                                    FPDF_FILEWRITE* pFileWrite,
+                                                    FPDF_DWORD flags);
+ FPDF_BOOL
+FPDF_SaveWithVersion(FPDF_DOCUMENT document,
+                     FPDF_FILEWRITE* pFileWrite,
+                     FPDF_DWORD flags,
+                     int fileVersion);
