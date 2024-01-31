@@ -1,3 +1,5 @@
 #include "fpdf_flatten.h"
 #include "fpdf_annot.h"
 #include "fpdf_formfill.h"
+#include "fpdf_edit.h"
+#include "fpdf_save.h"

@@ -116,6 +116,11 @@ final class Page implements IteratorAggregate
         $this->ffi->FPDF_ClosePage($this->handler);
     }
 
+    public function generateContent()
+    {
+        $this->ffi->FPDFPage_GenerateContent($this->handler);
+    }
+
     public function reload(): void
     {
         $this->close();
