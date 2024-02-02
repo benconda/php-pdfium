@@ -10,7 +10,7 @@ use Jcupitt\Vips\TargetCustom;
 final readonly class VipsImage implements ImageInterface
 {
     public function __construct(
-        private Renderer $renderer,
+        private PageBitmap $renderer,
         private Image $image
     ) {
     }

@@ -6,7 +6,6 @@ namespace BenCondaTest\PhpPdfium;
 
 use BenConda\PhpPdfium\Document;
 use BenConda\PhpPdfium\Page;
-use BenConda\PhpPdfium\Page\VipsImageRenderer;
 use BenConda\PhpPdfium\PhpPdfium;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +29,7 @@ final class PageTest extends TestCase
 
         self::assertSame(112, $page->getAnnotationsCount());
     }
-    
+
     private function loadDocument(string $name): Document
     {
         return $this->phpPdfium->loadDocument(dirname(__DIR__) . "/resources/$name.pdf");

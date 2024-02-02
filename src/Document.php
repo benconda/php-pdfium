@@ -16,6 +16,7 @@ final class Document implements IteratorAggregate
     private readonly \FFI $ffi;
 
     private CData $formHandler;
+
     private CData $formFillInfo;
 
     private static $writer;

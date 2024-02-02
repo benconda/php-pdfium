@@ -7,7 +7,7 @@ namespace BenConda\PhpPdfium;
 use BenConda\PhpPdfium\Page\Annotation\Annotation;
 use BenConda\PhpPdfium\Page\Annotation\AnnotationType;
 use BenConda\PhpPdfium\Page\Annotation\FormField;
-use BenConda\PhpPdfium\Page\Renderer;
+use BenConda\PhpPdfium\Page\PageBitmap;
 use FFI\CData;
 use IteratorAggregate;
 use Traversable;
@@ -78,13 +78,13 @@ final class Page implements IteratorAggregate
         }
     }
 
-    public function getRenderer(
+    public function getBitmap(
         ?int $width = null,
         ?int $height = null,
         ?int $x = 0,
         ?int $y = 0
-    ): Renderer {
-        return new Renderer($this, $width, $height, $x, $y);
+    ): PageBitmap {
+        return new PageBitmap($this, $width, $height, $x, $y);
     }
 
     public function flatten(): self
@@ -131,6 +131,4 @@ final class Page implements IteratorAggregate
     {
         $this->close();
     }
-
-
 }

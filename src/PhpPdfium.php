@@ -53,7 +53,7 @@ final class PhpPdfium
     {
         $text = mb_convert_encoding($utf16String, 'UTF-8', 'UTF-16LE');
 
-        return mb_strcut($text,0, strlen($text) -1);
+        return mb_strcut($text, 0, strlen($text) - 1);
     }
 
     public function __destruct()

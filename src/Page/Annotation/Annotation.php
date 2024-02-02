@@ -10,15 +10,13 @@ use FFI\CData;
 
 class Annotation
 {
-
     private readonly \FFI $ffi;
 
     public function __construct(
         private readonly Page $page,
         private readonly CData $handler,
         private readonly int $index,
-    )
-    {
+    ) {
         $this->ffi = PhpPdfium::lib()->FFI();
     }
 

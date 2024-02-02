@@ -9,11 +9,11 @@ use FFI\CData;
 
 final class FormField
 {
+    private readonly \FFI $ffi;
 
-    protected readonly \FFI $ffi;
-
-    public function __construct(private Annotation $annotation)
-    {
+    public function __construct(
+        private Annotation $annotation
+    ) {
         if (AnnotationType::WIDGET !== $annotation->getAnnotationType()) {
             throw new \LogicException("Wrong form field type");
         }
@@ -64,7 +64,7 @@ final class FormField
     private function getFormText(string $methodName): string
     {
         $formHandler = $this->getFormHandler();
-        $length =  $this->ffi->{$methodName}($formHandler, $this->annotation->getHandler(), null, 0);
+        $length = $this->ffi->{$methodName}($formHandler, $this->annotation->getHandler(), null, 0);
         $buffer = $this->ffi->new("FPDF_WCHAR");
         $pointer = \FFI::addr($buffer);
         $this->ffi->{$methodName}($formHandler, $this->annotation->getHandler(), $pointer, $length);

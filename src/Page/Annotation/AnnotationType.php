@@ -35,5 +35,4 @@ enum AnnotationType: int
     case RICHMEDIA = 26;
     case XFAWIDGET = 27;
     case REDACT = 28;
-
 }
