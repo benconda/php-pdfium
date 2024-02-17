@@ -4,31 +4,45 @@ declare(strict_types=1);
 
 namespace BenConda\PhpPdfium\Page\Annotation;
 
+use BenConda\PhpPdfium\Page;
 use BenConda\PhpPdfium\PhpPdfium;
 use FFI\CData;
 
-final class FormField
+class FormField extends Annotation
 {
-
-    protected readonly \FFI $ffi;
-
-    public function __construct(private Annotation $annotation)
+    public function __construct(Page $page, CData $handler, int $index)
     {
-        if (AnnotationType::WIDGET !== $annotation->getAnnotationType()) {
-            throw new \LogicException("Wrong form field type");
+        parent::__construct($page, $handler, $index);
+
+        if (AnnotationType::WIDGET !== $type = $this->getAnnotationType()) {
+            throw new \LogicException("Cannot create FormField instance on no widget annotation");
         }
-        $this->ffi = PhpPdfium::lib()->FFI();
     }
 
     public function getType(): FormFieldType
     {
-        $type = $this->ffi->FPDFAnnot_GetFormFieldType($this->getFormHandler(), $this->annotation->getHandler());
+        $type = $this->ffi->FPDFAnnot_GetFormFieldType($this->getFormHandler(), $this->handler);
+
         return FormFieldType::from($type);
     }
 
     public function getValue(): string
     {
         return $this->getFormText('FPDFAnnot_GetFormFieldValue');
+    }
+
+    public function setValue(string $value): void
+    {
+        $wideChar = PhpPdfium::lib()->convertToWideString($value);
+
+        $this->ffi->FPDFAnnot_SetStringValue(
+            $this->handler,
+            FormFieldDictionaryKey::VALUE->value,
+            \FFI::addr($wideChar)
+        );
+
+        // Reset appearance
+        $this->setAppearance(null);
     }
 
     public function getName(): string
@@ -48,33 +62,31 @@ final class FormField
 
     public function isChecked()
     {
-        return (bool) $this->ffi->FPDFAnnot_IsChecked($this->getFormHandler(), $this->annotation->getHandler());
+        return (bool) $this->ffi->FPDFAnnot_IsChecked($this->getFormHandler(), $this->handler);
     }
 
     public function getFormControlCount(): int
     {
-        return $this->ffi->FPDFAnnot_GetFormControlCount($this->getFormHandler(), $this->annotation->getHandler());
+        return $this->ffi->FPDFAnnot_GetFormControlCount($this->getFormHandler(), $this->handler);
     }
 
     public function getFormControlIndex(): int
     {
-        return $this->ffi->FPDFAnnot_GetFormControlIndex($this->getFormHandler(), $this->annotation->getHandler());
+        return $this->ffi->FPDFAnnot_GetFormControlIndex($this->getFormHandler(), $this->handler);
     }
 
     private function getFormText(string $methodName): string
     {
         $formHandler = $this->getFormHandler();
-        $length =  $this->ffi->{$methodName}($formHandler, $this->annotation->getHandler(), null, 0);
-        $buffer = $this->ffi->new("FPDF_WCHAR");
-        $pointer = \FFI::addr($buffer);
-        $this->ffi->{$methodName}($formHandler, $this->annotation->getHandler(), $pointer, $length);
-        $str = \FFI::string($pointer, $length);
 
-        return PhpPdfium::lib()->decodeUTF16toUT8($str);
+        return PhpPdfium::lib()->callStringRelatedMethod(
+            fn (?CData $char, int $length): int =>
+                $this->ffi->{$methodName}($formHandler, $this->handler, $char, $length)
+        );
     }
 
     private function getFormHandler(): CData
     {
-        return $this->annotation->getPage()->getDocument()->getFormHandler();
+        return $this->getPage()->getDocument()->getFormHandler();
     }
 }

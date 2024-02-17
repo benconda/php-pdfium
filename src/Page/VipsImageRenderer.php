@@ -10,15 +10,15 @@ use Jcupitt\Vips\Image;
 
 final readonly class VipsImageRenderer implements ImageRendererInterface
 {
-    public function renderPage(Renderer $renderer): ImageInterface
+    public function renderImage(PageBitmap $bitmap): ImageInterface
     {
         //Config::setLogger(new DebugLogger());
         $pointer = FFI::vips()->vips_image_new_from_memory(
-            $renderer->getRawBitmapBuffer(),
-            $renderer->size(),
-            $renderer->width,
-            $renderer->height,
-            $renderer::BANDS,
+            $bitmap->getBuffer(),
+            $bitmap->size(),
+            $bitmap->width,
+            $bitmap->height,
+            $bitmap::BANDS,
             BandFormat::UCHAR
         );
 
@@ -30,11 +30,6 @@ final readonly class VipsImageRenderer implements ImageRendererInterface
         $image[0] = $r;
         $image[2] = $b;
 
-        return new VipsImage($renderer, $image);
-    }
-
-    public function renderThumbnail(Renderer $renderer): ImageInterface
-    {
-        // TODO: Implement renderThumbnail() method.
+        return new VipsImage($bitmap, $image);
     }
 }

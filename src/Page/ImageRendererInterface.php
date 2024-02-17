@@ -6,7 +6,5 @@ namespace BenConda\PhpPdfium\Page;
 
 interface ImageRendererInterface
 {
-    public function renderPage(Renderer $renderer): ImageInterface;
-
-    public function renderThumbnail(Renderer $renderer): ImageInterface;
+    public function renderImage(PageBitmap $bitmap): ImageInterface;
 }

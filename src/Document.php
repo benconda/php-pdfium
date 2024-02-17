@@ -16,6 +16,7 @@ final class Document implements IteratorAggregate
     private readonly \FFI $ffi;
 
     private CData $formHandler;
+
     private CData $formFillInfo;
 
     private static $writer;
@@ -57,6 +58,11 @@ final class Document implements IteratorAggregate
         for ($index = 0; $index < $this->getPagesCount(); ++$index) {
             yield $this->loadPage($index);
         }
+    }
+
+    public function forceToKillFormFocus(): bool
+    {
+        return (bool) $this->ffi->FORM_ForceToKillFocus($this->formHandler);
     }
 
     public function getFormHandler(): CData

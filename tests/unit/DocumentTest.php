@@ -36,7 +36,8 @@ final class DocumentTest extends TestCase
         $directory = dirname(__DIR__) . '/resources/generated/notice';
         mkdir($directory, recursive: true);
         foreach ($notice as $page) {
-            $page->getRenderer()->render($renderer)->save($directory . "/{$page->getNumber()}.png");
+            $bitmap = $page->getBitmap();
+            $renderer->renderImage($bitmap)->save($directory . "/{$page->getNumber()}.png");
         }
         $files = scandir($directory);
         // 38 here because scandir() return "." and ".." folders in list

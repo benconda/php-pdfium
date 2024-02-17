@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BenConda\PhpPdfium;
 
 use BenConda\PhpPdfium\Page\Annotation\Annotation;
-use BenConda\PhpPdfium\Page\Annotation\AnnotationType;
+use BenConda\PhpPdfium\Page\Annotation\AnnotationFactory;
 use BenConda\PhpPdfium\Page\Annotation\FormField;
-use BenConda\PhpPdfium\Page\Renderer;
+use BenConda\PhpPdfium\Page\PageBitmap;
 use FFI\CData;
 use IteratorAggregate;
 use Traversable;
@@ -55,7 +55,7 @@ final class Page implements IteratorAggregate
             return null;
         }
 
-        return new Annotation($this, $annotationHandler, $index);
+        return AnnotationFactory::create($this, $annotationHandler, $index);
     }
 
     public function getIterator(): Traversable
@@ -72,19 +72,19 @@ final class Page implements IteratorAggregate
     public function getFormFieldsIterator(): Traversable
     {
         foreach ($this as $annotation) {
-            if (AnnotationType::WIDGET === $annotation->getAnnotationType()) {
-                yield new FormField($annotation);
+            if ($annotation instanceof FormField) {
+                yield $annotation;
             }
         }
     }
 
-    public function getRenderer(
+    public function getBitmap(
         ?int $width = null,
         ?int $height = null,
         ?int $x = 0,
         ?int $y = 0
-    ): Renderer {
-        return new Renderer($this, $width, $height, $x, $y);
+    ): PageBitmap {
+        return new PageBitmap($this, $width, $height, $x, $y);
     }
 
     public function flatten(): self
@@ -116,9 +116,9 @@ final class Page implements IteratorAggregate
         $this->ffi->FPDF_ClosePage($this->handler);
     }
 
-    public function generateContent()
+    public function generateContent(): bool
     {
-        $this->ffi->FPDFPage_GenerateContent($this->handler);
+        return (bool) $this->ffi->FPDFPage_GenerateContent($this->handler);
     }
 
     public function reload(): void
@@ -131,6 +131,4 @@ final class Page implements IteratorAggregate
     {
         $this->close();
     }
-
-
 }

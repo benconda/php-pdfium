@@ -8,7 +8,7 @@ use BenConda\PhpPdfium\Page;
 use BenConda\PhpPdfium\PhpPdfium;
 use FFI\CData;
 
-final class Renderer
+final class PageBitmap
 {
     public const BANDS = 4;
 
@@ -51,7 +51,7 @@ final class Renderer
         }
     }
 
-    public function renderPageBitmap(): CData
+    public function getHandler(): CData
     {
         // Initialize empty bitmap on the given size
         $this->bitmap = $this->ffi->FPDFBitmap_Create($this->width, $this->height, 0);
@@ -63,18 +63,13 @@ final class Renderer
         return $this->bitmap;
     }
 
-    public function getRawBitmapBuffer(): CData
+    public function getBuffer(): CData
     {
         if (! isset($this->bitmap)) {
-            $this->renderPageBitmap();
+            $this->getHandler();
         }
 
         return $this->ffi->FPDFBitmap_GetBuffer($this->bitmap);
-    }
-
-    public function render(ImageRendererInterface $renderer): ImageInterface
-    {
-        return $renderer->renderPage($this);
     }
 
     public function size(): int

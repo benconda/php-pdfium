@@ -48,7 +48,8 @@ final class PhpPfiumTest extends TestCase
         $targetDir = dirname(__DIR__) . '/resources/generated';
         mkdir($targetDir);
         $targetFile = $targetDir . '/0.png';
-        $page->flatten()->getRenderer()->render($imageRenderer)->save($targetFile);
+        $bitmap = $page->flatten()->getBitmap();
+        $imageRenderer->renderImage($bitmap)->save($targetFile);
         self::assertStringNotEqualsFile($targetFile, '');
         $renderedImage = Image::newFromFile($targetFile);
         self::assertSame(595, $renderedImage->width);
