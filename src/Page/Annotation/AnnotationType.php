@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BenConda\PhpPdfium\Page\Annotation;
 
+use BenConda\PhpPdfium\PhpPdfium;
+use FFI\CData;
+
 enum AnnotationType: int
 {
     case UNKNOWN = 0;
@@ -35,4 +38,11 @@ enum AnnotationType: int
     case RICHMEDIA = 26;
     case XFAWIDGET = 27;
     case REDACT = 28;
+
+    public static function fromAnnotationHandler(CData $handler): self
+    {
+        $type = PhpPdfium::lib()->FFI()->FPDFAnnot_GetSubtype($handler);
+
+        return self::from($type);
+    }
 }

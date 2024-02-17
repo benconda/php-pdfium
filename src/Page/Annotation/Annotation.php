@@ -10,21 +10,19 @@ use FFI\CData;
 
 class Annotation
 {
-    private readonly \FFI $ffi;
+    protected readonly \FFI $ffi;
 
     public function __construct(
-        private readonly Page $page,
-        private readonly CData $handler,
-        private readonly int $index,
+        protected readonly Page $page,
+        protected readonly CData $handler,
+        protected readonly int $index,
     ) {
         $this->ffi = PhpPdfium::lib()->FFI();
     }
 
     public function getAnnotationType(): AnnotationType
     {
-        $type = $this->ffi->FPDFAnnot_GetSubtype($this->handler);
-
-        return AnnotationType::from($type);
+        return AnnotationType::fromAnnotationHandler($this->handler);
     }
 
     public function getPage(): Page
@@ -40,6 +38,31 @@ class Annotation
     public function getIndex(): int
     {
         return $this->index;
+    }
+
+    public function getDictionaryStringValue(string $key): string
+    {
+        return PhpPdfium::lib()->callStringRelatedMethod(
+            fn (?CData $char, int $length) =>
+                $this->ffi->FPDFAnnot_GetStringValue($this->handler, $key, $char, $length)
+        );
+    }
+
+    public function getAppearance(): string
+    {
+        return PhpPdfium::lib()->callStringRelatedMethod(
+            fn (?CData $char, int $length) =>
+            $this->ffi->FPDFAnnot_GetAP($this->handler, 0, $char, $length)
+        );
+    }
+
+    public function setAppearance(?string $appearance): void
+    {
+        if (null !== $appearance) {
+            $appearance = PhpPdfium::lib()->convertToWideString($appearance);
+        }
+
+        $this->ffi->FPDFAnnot_SetAP($this->handler, 0, $appearance);
     }
 
     public function close(): void

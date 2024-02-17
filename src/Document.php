@@ -60,6 +60,11 @@ final class Document implements IteratorAggregate
         }
     }
 
+    public function forceToKillFormFocus(): bool
+    {
+        return (bool) $this->ffi->FORM_ForceToKillFocus($this->formHandler);
+    }
+
     public function getFormHandler(): CData
     {
         return $this->formHandler;
