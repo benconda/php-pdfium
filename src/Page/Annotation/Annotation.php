@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BenConda\PhpPdfium\Page\Annotation;
 
 use BenConda\PhpPdfium\Page;
+use BenConda\PhpPdfium\Page\PageCoordRectangle;
 use BenConda\PhpPdfium\PhpPdfium;
 use FFI\CData;
 
@@ -63,6 +64,21 @@ class Annotation
         }
 
         $this->ffi->FPDFAnnot_SetAP($this->handler, 0, $appearance);
+    }
+
+    public function getRectangle(): PageCoordRectangle
+    {
+        $rect = $this->ffi->new('FS_RECTF');
+        $this->ffi->FPDFAnnot_GetRect($this->handler, \FFI::addr($rect));
+
+        return PageCoordRectangle::fromPdfium($rect);
+    }
+
+    public function setRectangle(PageCoordRectangle $rectangle): bool
+    {
+        $rect = $this->ffi->new('FS_RECTF');
+        $rectangle->writeToPdfium($rect);
+        return (bool) $this->ffi->FPDFAnnot_SetRect($this->handler, \FFI::addr($rect));
     }
 
     public function close(): void

@@ -7,17 +7,11 @@ namespace BenCondaTest\PhpPdfium;
 use BenConda\PhpPdfium\Document;
 use BenConda\PhpPdfium\DocumentSaveFlags;
 use BenConda\PhpPdfium\Page\VipsImageRenderer;
-use BenConda\PhpPdfium\PhpPdfium;
 use PHPUnit\Framework\TestCase;
 
 final class DocumentTest extends TestCase
 {
-    private PhpPdfium $phpPdfium;
-
-    protected function setUp(): void
-    {
-        $this->phpPdfium = PhpPdfium::lib();
-    }
+    use TestDocumentLoaderHelper;
 
     public function testDocument(): void
     {
@@ -60,10 +54,5 @@ final class DocumentTest extends TestCase
         $newCerfaAnnotationCount = $newCerfa->loadPage(0)->getAnnotationsCount();
         // Then new doc is well flattened (no more annotation)
         self::assertSame(0, $newCerfaAnnotationCount);
-    }
-
-    private function loadDocument(string $name): Document
-    {
-        return $this->phpPdfium->loadDocument(dirname(__DIR__) . "/resources/$name.pdf");
     }
 }
