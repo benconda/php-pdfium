@@ -72,6 +72,10 @@ final class Document implements IteratorAggregate
 
     public function saveAsCopy(string $filename, int $saveFlag): bool
     {
+        $dir = dirname($filename);
+        if (! is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
         $fileWrite = $this->ffi->new('FPDF_FILEWRITE', false);
         $fileWrite->version = 1;
         self::$writer = fopen($filename, 'wb');

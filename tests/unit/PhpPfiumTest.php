@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 final class PhpPfiumTest extends TestCase
 {
+    use TestDocumentLoaderHelper;
+
     private PhpPdfium $phpPdfium;
 
     protected function setUp(): void
@@ -26,14 +28,14 @@ final class PhpPfiumTest extends TestCase
 
     public function testDocumentLoading(): void
     {
-        $document = $this->phpPdfium->loadDocument(dirname(__DIR__) . '/resources/cerfa_13750-05.pdf');
+        $document = $this->loadDocument('cerfa_13750-05');
         self::assertInstanceOf(Document::class, $document);
         self::assertSame(1, $document->getPageCount());
     }
 
     public function testPageLoading(): void
     {
-        $document = $this->phpPdfium->loadDocument(dirname(__DIR__) . '/resources/cerfa_13750-05.pdf');
+        $document = $this->loadDocument('cerfa_13750-05');
         $page = $document->loadPage(0);
         self::assertInstanceOf(Page::class, $page);
         self::assertSame(595, $page->getWidth());
@@ -42,7 +44,7 @@ final class PhpPfiumTest extends TestCase
 
     public function testFlattenRendering(): void
     {
-        $document = $this->phpPdfium->loadDocument(dirname(__DIR__) . '/resources/cerfa_13750-05.pdf');
+        $document = $this->loadDocument('cerfa_13750-05');
         $page = $document->loadPage(0);
         $imageRenderer = new Page\VipsImageRenderer();
         $targetDir = dirname(__DIR__) . '/resources/generated';
