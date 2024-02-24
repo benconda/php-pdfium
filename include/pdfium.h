@@ -734,6 +734,10 @@ FPDFAnnot_GetLinkedAnnot(FPDF_ANNOTATION annot, FPDF_BYTESTRING key);
  int
 FPDFAnnot_GetFormFieldFlags(FPDF_FORMHANDLE handle,
                             FPDF_ANNOTATION annot);
+ FPDF_BOOL
+FPDFAnnot_SetFormFieldFlags(FPDF_FORMHANDLE handle,
+                            FPDF_ANNOTATION annot,
+                            int flags);
  FPDF_ANNOTATION
 FPDFAnnot_GetFormFieldAtPoint(FPDF_FORMHANDLE hHandle,
                               FPDF_PAGE page,
