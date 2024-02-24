@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BenConda\PhpPdfium\Page\Annotation;
 
+use BenConda\PhpPdfium\FlagList;
 use BenConda\PhpPdfium\Page;
 use BenConda\PhpPdfium\PhpPdfium;
 use FFI\CData;
@@ -60,7 +61,7 @@ class FormField extends Annotation
         return $this->getFormText('FPDFAnnot_GetFormFieldExportValue');
     }
 
-    public function isChecked()
+    public function isChecked(): bool
     {
         return (bool) $this->ffi->FPDFAnnot_IsChecked($this->getFormHandler(), $this->handler);
     }
@@ -73,6 +74,13 @@ class FormField extends Annotation
     public function getFormControlIndex(): int
     {
         return $this->ffi->FPDFAnnot_GetFormControlIndex($this->getFormHandler(), $this->handler);
+    }
+
+    public function getFieldFlags(): FlagList
+    {
+        $flags = $this->ffi->FPDFAnnot_GetFormFieldFlags($this->getFormHandler(), $this->handler);
+
+        return FlagList::fromFlags($flags, ...FormFieldFlags::cases());
     }
 
     private function getFormText(string $methodName): string

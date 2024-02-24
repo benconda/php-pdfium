@@ -5,7 +5,8 @@
     "require": {
         "ext-ffi": "*",
         "php": "^8.2",
-        "jcupitt/vips": "^2.3"
+        "jcupitt/vips": "^2.3",
+        "benconda/collection": "0.1.0-alpha"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.4",

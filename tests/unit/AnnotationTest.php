@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BenCondaTest\PhpPdfium;
 
 use BenConda\PhpPdfium\DocumentSaveFlags;
-use BenConda\PhpPdfium\Page\Annotation\Annotation;
 use BenConda\PhpPdfium\Page\Annotation\FormField;
+use BenConda\PhpPdfium\Page\Annotation\FormFieldFlags;
 use BenConda\PhpPdfium\Page\Annotation\FormFieldType;
 use BenConda\PhpPdfium\Page\PageCoordRectangle;
 use PHPUnit\Framework\TestCase;
@@ -20,9 +20,11 @@ final class AnnotationTest extends TestCase
         $cerfaDoc = $this->loadDocument('cerfa_13750-05');
         $firstPage = $cerfaDoc->loadPage(0);
         $annot = $firstPage->loadAnnotation(13);
-        self::assertInstanceOf(Annotation::class, $annot);
+        self::assertInstanceOf(FormField::class, $annot);
         $rect = $annot->getRectangle();
         self::assertInstanceOf(PageCoordRectangle::class, $rect);
+        $flags = $annot->getFieldFlags();
+        self::assertTrue($flags->hasFlag(FormFieldFlags::DO_NOT_SPELL_CHECK));
     }
 
     public function testMoveAnnotation(): void

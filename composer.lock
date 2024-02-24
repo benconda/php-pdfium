@@ -4,8 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1f7510e1aab0d35c7e27b02c65c63b9",
+    "content-hash": "67afc775377f78cd3f3d462bf4c056c1",
     "packages": [
+        {
+            "name": "benconda/collection",
+            "version": "0.1.0-alpha",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/benconda/collection.git",
+                "reference": "dfee26488a7711b31d10bfc2f812666b4077b46a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/benconda/collection/zipball/dfee26488a7711b31d10bfc2f812666b4077b46a",
+                "reference": "dfee26488a7711b31d10bfc2f812666b4077b46a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.14",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^10.0",
+                "symfony/var-dumper": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BenConda\\Collection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benoit Condaminet",
+                    "email": "benoit@condami.net"
+                }
+            ],
+            "description": "Collection library, powered by generators, with generics, easily extendable and immutable. Lazy by design and memory friendly. Accept anything as iterable 🔥 (Generator, array, Iterator, ...)",
+            "support": {
+                "issues": "https://github.com/benconda/collection/issues",
+                "source": "https://github.com/benconda/collection/tree/0.1.0-alpha"
+            },
+            "time": "2023-04-27T11:48:56+00:00"
+        },
         {
             "name": "jcupitt/vips",
             "version": "v2.3.0",
@@ -2030,7 +2076,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "benconda/collection": 15
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
