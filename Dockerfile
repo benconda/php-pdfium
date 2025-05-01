@@ -7,13 +7,13 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions ffi
 
 # Translate TARGETPLATFORM to architecture format
-RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2) && \
+RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2 | sed 's/amd/x/') && \
     mkdir -p /usr/lib-pdfium && cd /usr/lib-pdfium && curl -L https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-linux-${ARCH}.tgz | tar -xz \
     && cp lib/libpdfium.so /usr/local/lib/libpdfium.so && ldconfig
 
 # Test libvips integration
-RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2) && \
-    mkdir -p /usr/lib-vips && cd /usr/lib-vips && curl -L https://github.com/lovell/sharp-libvips/releases/download/v8.16.1/libvips-8.16.1-linux-${ARCH}v8.tar.gz | tar -xz \
+RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2 | sed 's/amd/x/' | sed 's/arm64/arm64v8/') && \
+    mkdir -p /usr/lib-vips && cd /usr/lib-vips && curl -L https://github.com/lovell/sharp-libvips/releases/download/v8.16.1/libvips-8.16.1-linux-${ARCH}.tar.gz | tar -xz \
     && cp lib/libvips-cpp.so.* /usr/local/lib/libvips.so.42  && ldconfig
 
 ENV VIPSHOME=/usr/local
