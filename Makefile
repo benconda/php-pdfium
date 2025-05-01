@@ -8,4 +8,8 @@ test:
 
 .PHONY: test-ci
 test-ci:
-	docker-compose -f docker-compose.ci.yml build && docker-compose -f docker-compose.ci.yml run --rm php-pdfium sh -c "composer install --prefer-dist --no-progress && ls -l && ./vendor/bin/phpunit"
+	docker buildx bake -f docker-compose.ci.yml && docker compose -f docker-compose.ci.yml run --rm php-pdfium sh -c "composer install --prefer-dist --no-progress && ls -l && ./vendor/bin/phpunit"
+
+.PHONY: build
+build:
+	docker buildx bake

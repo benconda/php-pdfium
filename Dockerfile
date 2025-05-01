@@ -1,15 +1,19 @@
-FROM php:8.2-cli-bookworm as base
+FROM php:8.2-cli-bookworm AS base
+ARG TARGETPLATFORM
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions ffi
 
-RUN mkdir -p /usr/lib-pdfium && cd /usr/lib-pdfium && curl -L https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-linux-arm64.tgz | tar -xz \
+# Translate TARGETPLATFORM to architecture format
+RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2) && \
+    mkdir -p /usr/lib-pdfium && cd /usr/lib-pdfium && curl -L https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-linux-${ARCH}.tgz | tar -xz \
     && cp lib/libpdfium.so /usr/local/lib/libpdfium.so && ldconfig
 
 # Test libvips integration
-RUN mkdir -p /usr/lib-vips && cd /usr/lib-vips && curl -L https://github.com/lovell/sharp-libvips/releases/download/v8.16.1/libvips-8.16.1-linux-arm64v8.tar.gz | tar -xz \
+RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2) && \
+    mkdir -p /usr/lib-vips && cd /usr/lib-vips && curl -L https://github.com/lovell/sharp-libvips/releases/download/v8.16.1/libvips-8.16.1-linux-${ARCH}v8.tar.gz | tar -xz \
     && cp lib/libvips-cpp.so.* /usr/local/lib/libvips.so.42  && ldconfig
 
 ENV VIPSHOME=/usr/local
@@ -20,7 +24,7 @@ RUN echo "#define FFI_LIB \"libpdfium.so\"" > /usr/lib-pdfium/include/pdfium.h &
 
 WORKDIR /usr/php-pdfium
 
-FROM base as ci
+FROM base AS ci
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN apt-get update && apt-get install zip -y
