@@ -55,7 +55,7 @@ final class DocumentTest extends TestCase
     public function testPageSizeIterator()
     {
         $layout = [];
-        $notice = $this->loadDocument('yolo');
+        $notice = $this->loadDocument('notice');
         foreach ($notice->pageSizeIterator() as $size) {
             $layout[] = [
                 'width' => (int)$size->width,
