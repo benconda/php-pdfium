@@ -1,3 +1,4 @@
 /.phpunit.cache
 /tests/resources/generated
 /vendor/
+/lib-headers/

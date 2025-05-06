@@ -1,6 +1,10 @@
 .PHONY: dump-header
-dump-header:
-	docker-compose up -d --build && docker compose cp php-pdfium:/usr/lib-pdfium/include/pdfium.h ./include/pdfium.h
+dump-header: build
+	docker compose cp php-pdfium:/usr/lib-pdfium/include/pdfium.h ./include/pdfium.h
+
+.PHONY: dump-lib-headers
+dump-lib-headers: build
+	mkdir -p ./lib-headers/pdfium && docker compose cp php-pdfium:/usr/lib-pdfium/include ./lib-headers/pdfium/.
 
 .PHONY: test
 test:
