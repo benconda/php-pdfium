@@ -36,6 +36,36 @@ final class Document implements IteratorAggregate
         return $this->ffi->FPDF_GetPageCount($this->handler);
     }
 
+    public function getPageSizeByIndex(int $pageIndex): ?Size
+    {
+        $size = $this->ffi->new('FS_SIZEF');
+
+        $result = $this->ffi->FPDF_GetPageSizeByIndexF(
+            $this->handler,
+            $pageIndex,
+            \FFI::addr($size),
+        );
+
+        if (0 === $result) {
+            return null;
+        }
+
+        return new Size(
+            $size->width,
+            $size->height,
+        );
+    }
+
+    /**
+     * @return list<Size>
+     */
+    public function pageSizeIterator(): iterable
+    {
+        for ($index = 0; $index < $this->getPagesCount(); ++$index) {
+            yield $this->getPageSizeByIndex($index);
+        }
+    }
+
     public function loadPage(int $pageIndex): ?Page
     {
         $pageHandler = $this->ffi->FPDF_LoadPage($this->handler, $pageIndex);

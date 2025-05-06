@@ -38,6 +38,37 @@ final class DocumentTest extends TestCase
         self::assertCount(38, $files);
     }
 
+    public function testGetPageSizeByIndex(): void
+    {
+        $notice = $this->loadDocument('notice');
+        $size = $notice->getPageSizeByIndex(0);
+        self::assertSame(595, (int)$size->width);
+        self::assertSame(841, (int)$size->height);
+
+        $badIndex = $notice->getPageSizeByIndex(-5);
+        self::assertNull($badIndex);
+
+        $badIndex2 = $notice->getPageSizeByIndex(1000);
+        self::assertNull($badIndex2);
+    }
+
+    public function testPageSizeIterator()
+    {
+        $layout = [];
+        $notice = $this->loadDocument('yolo');
+        foreach ($notice->pageSizeIterator() as $size) {
+            $layout[] = [
+                'width' => (int)$size->width,
+                'height' => (int)$size->height,
+            ];
+        }
+        self::assertCount(36, $layout);
+        foreach ($layout as $pageSize) {
+            self::assertSame(595, $pageSize['width']);
+            self::assertSame(841, $pageSize['height']);
+        }
+    }
+
     public function testSaveFlattenedCopy(): void
     {
         $cerfaDoc = $this->loadDocument('cerfa_13750-05');
