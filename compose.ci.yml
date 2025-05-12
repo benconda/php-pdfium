@@ -3,5 +3,5 @@ services:
     image: phpdfium:ci
     build:
       context: ./
-      dockerfile: ./Dockerfile
+      dockerfile: ./docker/php-ffi/Dockerfile
       target: ci

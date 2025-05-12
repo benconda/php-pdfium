@@ -6,25 +6,39 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions ffi
 
-# Translate TARGETPLATFORM to architecture format
-RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2 | sed 's/amd/x/') && \
-    mkdir -p /usr/lib-pdfium && cd /usr/lib-pdfium && curl -L https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-linux-${ARCH}.tgz | tar -xz \
-    && cp lib/libpdfium.so /usr/local/lib/libpdfium.so && ldconfig
-
 # Test libvips integration
 RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2 | sed 's/amd/x/' | sed 's/arm64/arm64v8/') && \
     mkdir -p /usr/lib-vips && cd /usr/lib-vips && curl -L https://github.com/lovell/sharp-libvips/releases/download/v8.16.1/libvips-8.16.1-linux-${ARCH}.tar.gz | tar -xz \
     && cp lib/libvips-cpp.so.* /usr/local/lib/libvips.so.42  && ldconfig
 
+RUN mkdir -p /usr/lib-pdfium
+
 ENV VIPSHOME=/usr/local
+
+WORKDIR /usr/php-pdfium
+
+FROM base AS precompiled
+ARG TARGETPLATFORM
+
+# Translate TARGETPLATFORM to architecture format
+RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2 | sed 's/amd/x/') && \
+    mkdir -p /usr/lib-pdfium && cd /usr/lib-pdfium && curl -L https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-linux-${ARCH}.tgz | tar -xz \
+    && cp lib/libpdfium.so /usr/local/lib/libpdfium.so && ldconfig
 
 COPY --link ./include/header.h /usr/lib-pdfium/include/header.h
 
 RUN echo "#define FFI_LIB \"libpdfium.so\"" > /usr/lib-pdfium/include/pdfium.h && gcc -P -E /usr/lib-pdfium/include/header.h >> /usr/lib-pdfium/include/pdfium.h
 
-WORKDIR /usr/php-pdfium
+FROM base AS compiled
 
-FROM base AS ci
+COPY ./lib/pdfium /usr/lib-pdfium/
+
+COPY  ./include/header.h /usr/lib-pdfium/include/header.h
+RUN echo "#define FFI_LIB \"libpdfium.so\"" > /usr/lib-pdfium/include/pdfium.h && gcc -P -E /usr/lib-pdfium/include/header.h >> /usr/lib-pdfium/include/pdfium.h
+
+RUN cp /usr/lib-pdfium/lib/libpdfium.so /usr/local/lib/libpdfium.so && ldconfig
+
+FROM precompiled AS ci
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN apt-get update && apt-get install zip -y

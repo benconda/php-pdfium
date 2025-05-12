@@ -1,0 +1,26 @@
+
+services:
+  php-pdfium:
+    image: phpdfium:dev
+    build:
+      context: ./
+      dockerfile: ./docker/php-ffi/Dockerfile
+      target: precompiled # Switch to compiled to use a custom pdfium local build
+      x-bake:
+        platforms:
+#          - linux/amd64 # If switching to compiled, this should be the same as the pdfium-lib build
+          - linux/arm64
+    volumes:
+      - ./:/usr/php-pdfium
+
+  # A specific image to build the pdfium library ourselves
+  pdfium-lib:
+    image: pdfiumlib:dev
+    volumes:
+      - ./lib/pdfium:/home/ubuntu/pdfium-binaries/staging
+    build:
+      context: ./
+      dockerfile: ./docker/libpdfium/Dockerfile
+      x-bake:
+        platforms:
+          - linux/amd64 # Pdfium lib build only supports amd64 platform, arm64 build is still possible through cross compilation
