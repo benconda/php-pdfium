@@ -24,8 +24,9 @@ final class PageBitmap
         private readonly Page $page,
         ?int $width = null,
         ?int $height = null,
-        private ?int $x = 0,
-        private ?int $y = 0
+        public readonly ?int $x = 0,
+        public readonly ?int $y = 0,
+        public readonly bool $withFormValues = false,
     ) {
         $this->ffi = PhpPdfium::lib()->FFI();
         $pageWidth = $this->page->getWidth();
@@ -59,6 +60,11 @@ final class PageBitmap
         $this->ffi->FPDFBitmap_FillRect($this->bitmap, 0, 0, $this->width, $this->height, 0xFFFFFF);
         // Render in bitmap
         $this->ffi->FPDF_RenderPageBitmap($this->bitmap, $this->page->getHandler(), $this->x, $this->y, $this->width, $this->height, 0, 0x800);
+
+        if ($this->withFormValues) {
+            $formHandle = $this->page->getDocument()->getFormHandler();
+            $this->ffi->FPDF_FFLDraw($formHandle, $this->bitmap, $this->page->getHandler(), $this->x, $this->y, $this->width, $this->height, 0, 0);
+        }
 
         return $this->bitmap;
     }
