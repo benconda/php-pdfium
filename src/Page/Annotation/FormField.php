@@ -60,7 +60,7 @@ class FormField extends Annotation
         return $this->getFormText('FPDFAnnot_GetFormFieldExportValue');
     }
 
-    public function isChecked()
+    public function isChecked(): bool
     {
         return (bool) $this->ffi->FPDFAnnot_IsChecked($this->getFormHandler(), $this->handler);
     }
@@ -73,6 +73,21 @@ class FormField extends Annotation
     public function getFormControlIndex(): int
     {
         return $this->ffi->FPDFAnnot_GetFormControlIndex($this->getFormHandler(), $this->handler);
+    }
+
+    public function getFieldFlags(): FormFieldFlagList
+    {
+        $flags = $this->ffi->FPDFAnnot_GetFormFieldFlags($this->getFormHandler(), $this->handler);
+
+        return new FormFieldFlagList($flags);
+    }
+
+    /**
+     * Added in pdfium version 138.0.7188.0
+     */
+    public function setFieldFlags(FormFieldFlagList $flags): bool
+    {
+        return 1 === $this->ffi->FPDFAnnot_SetFormFieldFlags($this->getFormHandler(), $this->handler, $flags->flags);
     }
 
     private function getFormText(string $methodName): string
