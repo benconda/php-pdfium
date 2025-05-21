@@ -42,8 +42,8 @@ final class DocumentTest extends TestCase
     {
         $notice = $this->loadDocument('notice');
         $size = $notice->getPageSizeByIndex(0);
-        self::assertSame(595, (int)$size->width);
-        self::assertSame(841, (int)$size->height);
+        self::assertSame(595, (int) $size->width);
+        self::assertSame(841, (int) $size->height);
 
         $badIndex = $notice->getPageSizeByIndex(-5);
         self::assertNull($badIndex);
@@ -58,8 +58,8 @@ final class DocumentTest extends TestCase
         $notice = $this->loadDocument('notice');
         foreach ($notice->pageSizeIterator() as $size) {
             $layout[] = [
-                'width' => (int)$size->width,
-                'height' => (int)$size->height,
+                'width' => (int) $size->width,
+                'height' => (int) $size->height,
             ];
         }
         self::assertCount(36, $layout);
