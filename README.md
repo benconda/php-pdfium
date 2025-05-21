@@ -1,3 +1,5 @@
+[![Packagist Version](https://img.shields.io/packagist/v/benconda/php-pdfium)](https://packagist.org/packages/benconda/php-pdfium)
+
 # Experimental
 
 This is a first attempt to implement PDFium in PHP using FFI.
