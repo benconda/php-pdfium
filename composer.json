@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "ext-ffi": "*",
-        "php": "^8.2",
+        "php": ">=8.2",
         "jcupitt/vips": "^2.3"
     },
     "require-dev": {
