@@ -17,7 +17,7 @@ test-ci:
 
 .PHONY: build
 build:
-	docker buildx bake php-pdfium
+	docker buildx bake php-pdfium --load
 
 .PHONY: build-pdfium-lib
 build-pdfium-lib:

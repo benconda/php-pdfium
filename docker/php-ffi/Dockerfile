@@ -6,10 +6,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions ffi
 
-# Test libvips integration
-RUN ARCH=$(echo ${TARGETPLATFORM} | cut -d'/' -f2 | sed 's/amd/x/' | sed 's/arm64/arm64v8/') && \
-    mkdir -p /usr/lib-vips && cd /usr/lib-vips && curl -L https://github.com/lovell/sharp-libvips/releases/download/v8.16.1/libvips-8.16.1-linux-${ARCH}.tar.gz | tar -xz \
-    && cp lib/libvips-cpp.so.* /usr/local/lib/libvips.so.42  && ldconfig
+RUN apt-get update && apt-get install -y --no-install-recommends libvips42 && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/lib-pdfium
 
