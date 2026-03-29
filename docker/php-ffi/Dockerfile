@@ -1,4 +1,4 @@
-FROM php:8.2-cli-bookworm AS base
+FROM php:8.4-cli-bookworm AS base
 ARG TARGETPLATFORM
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -13,6 +13,9 @@ RUN mkdir -p /usr/lib-pdfium
 ENV VIPSHOME=/usr/local
 
 WORKDIR /usr/php-pdfium
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN apt-get update && apt-get install zip -y
 
 FROM base AS precompiled
 ARG TARGETPLATFORM
@@ -37,6 +40,4 @@ RUN cp /usr/lib-pdfium/lib/libpdfium.so /usr/local/lib/libpdfium.so && ldconfig
 
 FROM precompiled AS ci
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-RUN apt-get update && apt-get install zip -y
 COPY --link . /usr/php-pdfium
