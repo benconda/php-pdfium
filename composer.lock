@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52ad693d9306de7d3378d5569bb8234d",
+    "content-hash": "0d1a610d5582daf055b36fa1b9d69858",
     "packages": [
         {
             "name": "jcupitt/vips",
@@ -2097,7 +2097,7 @@
     "prefer-lowest": false,
     "platform": {
         "ext-ffi": "*",
-        "php": ">=8.2"
+        "php": ">=8.4"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"
