@@ -51,6 +51,82 @@ final class PhpPdfium
         return new Document($docHandler);
     }
 
+    /**
+     * @param resource $resource
+     */
+    public function loadDocumentFromResource($resource): ?Document
+    {
+        $stat = fstat($resource);
+        if (false === $stat) {
+            return null;
+        }
+        $fileLen = $stat['size'];
+
+        $fileAccess = $this->ffi->new('FPDF_FILEACCESS');
+        $fileAccess->m_FileLen = $fileLen;
+        $fileAccess->m_Param = null;
+
+        $callback = function ($param, $position, $pBuf, $size) use ($resource): int {
+            if (-1 === fseek($resource, $position)) {
+                return 0;
+            }
+
+            $buffer = '';
+            $totalRead = 0;
+            while ($totalRead < $size) {
+                $data = fread($resource, $size - $totalRead);
+                if (false === $data) {
+                    return 0;
+                }
+                if ('' === $data) {
+                    // End of file - check if we read enough
+                    break;
+                }
+                $buffer .= $data;
+                $totalRead += strlen($data);
+            }
+
+            // Only succeed if we read exactly the requested size
+            if ($totalRead !== $size) {
+                return 0;
+            }
+
+            \FFI::memcpy($pBuf, $buffer, $size);
+            return 1;
+        };
+
+        $fileAccess->m_GetBlock = $callback;
+
+        $docHandler = $this->ffi->FPDF_LoadCustomDocument(\FFI::addr($fileAccess), null);
+        if (null === $docHandler) {
+            return null;
+        }
+
+        // Keep the resource, callback, and fileAccess alive for the document's lifetime.
+        // Explicit cleanup is needed because the FFI trampoline created for m_GetBlock
+        // may hold a reference to the closure, preventing the stream resource from being
+        // closed via normal refcounting.
+        $owningObject = new class($resource, $callback, $fileAccess) {
+            public function __construct(
+                private mixed $resource,
+                private mixed $callback,
+                private mixed $fileAccess,
+            ) {
+            }
+
+            public function __destruct()
+            {
+                $this->fileAccess = null;
+                $this->callback = null;
+                if (is_resource($this->resource)) {
+                    fclose($this->resource);
+                }
+            }
+        };
+
+        return new Document($docHandler, $owningObject);
+    }
+
     public function decodeUTF16toUT8(string $utf16String): string
     {
         $text = mb_convert_encoding($utf16String, 'UTF-8', 'UTF-16LE');

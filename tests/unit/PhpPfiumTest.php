@@ -33,6 +33,13 @@ final class PhpPfiumTest extends TestCase
         self::assertSame(1, $document->getPageCount());
     }
 
+    public function testDocumentLoadingFromResource(): void
+    {
+        $document = $this->loadDocumentFromResource('cerfa_13750-05');
+        self::assertInstanceOf(Document::class, $document);
+        self::assertSame(1, $document->getPageCount());
+    }
+
     public function testPageLoading(): void
     {
         $document = $this->loadDocument('cerfa_13750-05');
@@ -44,7 +51,7 @@ final class PhpPfiumTest extends TestCase
 
     public function testFlattenRendering(): void
     {
-        $document = $this->loadDocument('cerfa_13750-05');
+        $document = $this->loadDocument('version4pdf');
         $page = $document->loadPage(0);
         $imageRenderer = new Page\VipsImageRenderer();
         $targetDir = dirname(__DIR__) . '/resources/generated';
@@ -54,7 +61,20 @@ final class PhpPfiumTest extends TestCase
         $imageRenderer->renderImage($bitmap)->save($targetFile);
         self::assertStringNotEqualsFile($targetFile, '');
         $renderedImage = Image::newFromFile($targetFile);
-        self::assertSame(595, $renderedImage->width);
-        self::assertSame(841, $renderedImage->height);
+        self::assertSame(612, $renderedImage->width);
+        self::assertSame(792, $renderedImage->height);
+    }
+
+    public function testFlattenRenderingFromStreamWrapper(): void
+    {
+        $document = $this->loadDocumentFromStreamWrapper('version4pdf');
+        $page = $document->loadPage(0);
+        $imageRenderer = new Page\VipsImageRenderer();
+        $targetDir = dirname(__DIR__) . '/resources/generated';
+        mkdir($targetDir);
+        $targetFile = $targetDir . '/1.png';
+        $bitmap = $page->flatten()->getBitmap();
+        $imageRenderer->renderImage($bitmap)->save($targetFile);
+        self::assertStringNotEqualsFile($targetFile, '');
     }
 }

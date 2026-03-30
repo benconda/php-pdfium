@@ -4,14 +4,9 @@ namespace BenConda\PhpPdfium\Page\Annotation;
 
 class FormFieldFlagList
 {
-
-    /**
-     * @param int $flags
-     */
     public function __construct(
         public int $flags,
-    )
-    {
+    ) {
     }
 
     public function hasFlag(FormFieldFlag $flag): bool

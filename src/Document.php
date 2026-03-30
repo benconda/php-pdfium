@@ -23,6 +23,7 @@ final class Document implements IteratorAggregate
 
     public function __construct(
         public readonly CData $handler,
+        private mixed $owningObject = null,
     ) {
         $this->ffi = PhpPdfium::lib()->FFI();
         $this->formFillInfo = $this->ffi->new('FPDF_FORMFILLINFO');
